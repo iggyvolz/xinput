@@ -1,0 +1,11 @@
+{
+  "require": {
+    "php": "^8.3",
+    "ext-ffi": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "iggyvolz\\xinput\\": "src/"
+    }
+  }
+}
