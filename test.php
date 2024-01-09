@@ -33,6 +33,7 @@ while(true) {
             echo ")";
             if($name === "Left") echo ", ";
         }
+        $xinput->setState($i, new \iggyvolz\xinput\Vibration($state->leftTrigger * 256, $state->rightTrigger * 256));
         echo PHP_EOL;
         echo "Thumbsticks: ";
         foreach(["Left" => [$state->thumbLeftX, $state->thumbLeftY, 7849], "Right" => [$state->thumbRightX, $state->thumbRightY, 8689]] as $name => [$x, $y, $deadZone]) {

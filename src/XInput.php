@@ -123,12 +123,21 @@ final class XInput
     private array $states = [];
     public function getState(int $index): Gamepad
     {
-        $currentPackageNumber = ($this->statesCdata[$index] ?? null)?->dwPacketNumber;
+        $currentPacketNumber = ($this->statesCdata[$index] ?? null)?->dwPacketNumber;
         $this->statesCdata[$index] ??= $this->ffi->new("XINPUT_STATE");
         self::assert($this->ffi->XInputGetState($index, FFI::addr($state = $this->statesCdata[$index])));
-        if($state->dwPacketNumber !== $currentPackageNumber) {
+        if($state->dwPacketNumber !== $currentPacketNumber) {
             $this->states[$index] = Gamepad::from($state->Gamepad);
         }
         return $this->states[$index];
+    }
+
+    public function setState(int $index, Vibration $vibration): Vibration
+    {
+        $vibrationCdata = $this->ffi->new("XINPUT_VIBRATION");
+        $vibrationCdata->wLeftMotorSpeed = $vibration->leftMotorSpeed;
+        $vibrationCdata->wRightMotorSpeed = $vibration->rightMotorSpeed;
+        self::assert($this->ffi->XInputSetState($index, FFI::addr($vibrationCdata)));
+        return Vibration::from($vibrationCdata);
     }
 }
