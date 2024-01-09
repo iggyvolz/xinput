@@ -7,6 +7,8 @@ use iggyvolz\xinput\XInput;
 require_once __DIR__ . "/vendor/autoload.php";
 $xinput = new XInput();
 while(true) {
+    echo chr(27).chr(91).'H'.chr(27).chr(91).'J';   //^[H^[J
+
     for($i=0; $i<4; $i++) {
         try {
             $batteryInformation = $xinput->getBatteryInformation($i);
@@ -48,5 +50,5 @@ while(true) {
         }
         echo PHP_EOL;
     }
-    usleep(500_000);
+    usleep(1000);
 }
