@@ -2,6 +2,8 @@
 
 use iggyvolz\xinput\Button;
 use iggyvolz\xinput\DeviceNotConnectedException;
+use iggyvolz\xinput\Vibration;
+use iggyvolz\xinput\WinException;
 use iggyvolz\xinput\XInput;
 
 require_once __DIR__ . "/vendor/autoload.php";
@@ -17,6 +19,9 @@ while(true) {
         } catch(DeviceNotConnectedException) {
             echo "Controller $i: not connected" . PHP_EOL;
             continue;
+        } catch (WinException $e) {
+            echo "Unexpected Windows error " . $e->getCode() . PHP_EOL;
+            exit(1);
         }
         echo "Controller $i: connected" . PHP_EOL;
         echo "Battery type: " . $batteryInformation->batteryType->name . ", level: " . $batteryInformation->batteryLevel->name . PHP_EOL;
@@ -33,7 +38,12 @@ while(true) {
             echo ")";
             if($name === "Left") echo ", ";
         }
-        $xinput->setState($i, new \iggyvolz\xinput\Vibration($state->leftTrigger * 256, $state->rightTrigger * 256));
+        try {
+            $xinput->setState($i, new Vibration($state->leftTrigger * 256, $state->rightTrigger * 256));
+        } catch (WinException $e) {
+            echo "Unexpected Windows error " . $e->getCode() . PHP_EOL;
+            exit(1);
+        }
         echo PHP_EOL;
         echo "Thumbsticks: ";
         foreach(["Left" => [$state->thumbLeftX, $state->thumbLeftY, 7849], "Right" => [$state->thumbRightX, $state->thumbRightY, 8689]] as $name => [$x, $y, $deadZone]) {

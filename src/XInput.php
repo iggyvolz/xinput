@@ -103,6 +103,9 @@ final class XInput
         return Capabilities::from($capabilities);
     }
 
+    /**
+     * @throws WinException
+     */
     public function getBatteryInformation(int $index, BatteryDeviceType $deviceType = BatteryDeviceType::Gamepad): BatteryInformation
     {
         $batteryInformation = $this->ffi->new("XINPUT_BATTERY_INFORMATION");
@@ -121,6 +124,10 @@ final class XInput
      * If statesCdata[$i] is set, then states[$i] is also set and to be treated as valid as long as $statesCdata[$i] is valid
      */
     private array $states = [];
+
+    /**
+     * @throws WinException
+     */
     public function getState(int $index): Gamepad
     {
         $currentPacketNumber = ($this->statesCdata[$index] ?? null)?->dwPacketNumber;
@@ -132,6 +139,9 @@ final class XInput
         return $this->states[$index];
     }
 
+    /**
+     * @throws WinException
+     */
     public function setState(int $index, Vibration $vibration): Vibration
     {
         $vibrationCdata = $this->ffi->new("XINPUT_VIBRATION");

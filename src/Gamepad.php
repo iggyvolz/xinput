@@ -33,8 +33,4 @@ final readonly class Gamepad
             thumbRightY: $gamepad->sThumbRY
         );
     }
-    public function __toString(): string
-    {
-        // TODO: Implement __toString() method.
-    }
 }
